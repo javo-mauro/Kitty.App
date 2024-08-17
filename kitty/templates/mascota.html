@@ -3,8 +3,16 @@
  <!-- DATA -->
     <div class="content-data" id="data">
         <div class="container">
-            <h2>Mascotas</h2>
-            <p>Mascotitas</p>
+            <h2>Bienvenido a Kitty PaW</h2>
+            {% if request.user.is_authenticated %}
+            <h1>Hola {{ request.user.username }}</h1>
+            {% endif %}
+            <p>Cuantanos un poco de la relación con tu mascota-</p>
+            <form action = "" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Guardar</button>
+            </form>
         </div>
     </div>
 
