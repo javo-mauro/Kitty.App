@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-data" id="data">
+    <div class="container">
+    <h2>Información de tu Mascota</h2>
+        <h1>Hola {{ mascota.nombre }}</h1
+    <form method="post">
+        {% csrf_token %}
+        <h1>Hola </h1>{{ form.nombre}}
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+{% endblock %}

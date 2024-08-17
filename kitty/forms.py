@@ -8,7 +8,7 @@ class MascotaForm(forms.ModelForm):
             'nombre', 'especie', 'raza', 'fecha_nacimiento', 
             'fecha_adquisicion', 'origen', 'pasado_adoptado', 
             'tiene_enfermedades', 'enfermedades', 
-            'ultima_visita_veterinario', 'tratamiento_enfermedades'
+            'ultima_visita_veterinario', 'tratamiento_enfermedades', 
         ]#el orden de los fils puede ser modificado para renderisar en el orden
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
@@ -16,3 +16,4 @@ class MascotaForm(forms.ModelForm):
             'ultima_visita_veterinario': forms.DateInput(attrs={'type': 'date'}),
             'enfermedades': forms.Textarea(attrs={'rows': 3}),
         }
+

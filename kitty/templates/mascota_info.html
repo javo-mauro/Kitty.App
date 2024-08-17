@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+    <div class="content-data" id="data">
+        <div class="container">
+            <h2>Información de tu Mascota</h2>
+            {% csrf_token %}
+            <p><strong>Nombre:</strong> {{ mascota.nombre }}</p>
+            <p><strong>Especie:</strong> {{ mascota.especie }}</p>
+            <p><strong>Raza:</strong> {{ mascota.raza }}</p>
+            <p><strong>Fecha de Nacimiento:</strong> {{ mascota.fecha_nacimiento }}</p>
+            <p><strong>Fecha de Adquisición:</strong> {{ mascota.fecha_adquisicion }}</p>
+            <p><strong>Origen:</strong> {{ mascota.origen }}</p>
+            <p><strong>Pasado Adoptado:</strong> {{ mascota.pasado_adoptado }}</p>
+            <p><strong>Tiene Enfermedades:</strong> {{ mascota.tiene_enfermedades|yesno:"Sí,No" }}</p>
+            <p><strong>Enfermedades:</strong> {{ mascota.enfermedades }}</p>
+            <p><strong>Última Visita al Veterinario:</strong> {{ mascota.ultima_visita_veterinario }}</p>
+            <p><strong>Tratamiento Enfermedades:</strong> {{ mascota.tratamiento_enfermedades|yesno:"Sí,No" }}</p>
+        
+        </div>
+    </div>
+    {% endblock %}

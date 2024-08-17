@@ -1,20 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
- <!-- DATA -->
-    <div class="content-data" id="data">
-        <div class="container">
-            <h2>Bienvenido a Kitty PaW</h2>
-            {% if request.user.is_authenticated %}
+<div class="content-data" id="data">
+    <div class="container">
+        <h2>Bienvenido a Kitty PaW</h2>
+        {% if request.user.is_authenticated %}
             <h1>Hola {{ request.user.username }}</h1>
-            {% endif %}
-            <p>Cuantanos un poco de la relación con tu mascota-</p>
-            <form action = "" method="post">
+            <p>Cuéntanos un poco sobre la relación con tu mascota:</p>
+            <form action="" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit">Guardar</button>
             </form>
-        </div>
+        {% else %}
+            <p>Debes estar registrado para acceder a este formulario.</p>
+        {% endif %}
     </div>
-
-
+</div>
 {% endblock %}
