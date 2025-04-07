@@ -1,22 +1,150 @@
 {% extends 'base.html' %}
 
-    {% block content %}
-    <div class="content-data" id="data">
-        <div class="container">
-            <h2>Información de tu Mascota</h2>
-            {% csrf_token %}
-            <p><strong>Nombre:</strong> {{ mascota.nombre }}</p>
-            <p><strong>Especie:</strong> {{ mascota.especie }}</p>
-            <p><strong>Raza:</strong> {{ mascota.raza }}</p>
-            <p><strong>Fecha de Nacimiento:</strong> {{ mascota.fecha_nacimiento }}</p>
-            <p><strong>Fecha de Adquisición:</strong> {{ mascota.fecha_adquisicion }}</p>
-            <p><strong>Origen:</strong> {{ mascota.origen }}</p>
-            <p><strong>Pasado Adoptado:</strong> {{ mascota.pasado_adoptado }}</p>
-            <p><strong>Tiene Enfermedades:</strong> {{ mascota.tiene_enfermedades|yesno:"Sí,No" }}</p>
-            <p><strong>Enfermedades:</strong> {{ mascota.enfermedades }}</p>
-            <p><strong>Última Visita al Veterinario:</strong> {{ mascota.ultima_visita_veterinario }}</p>
-            <p><strong>Tratamiento Enfermedades:</strong> {{ mascota.tratamiento_enfermedades|yesno:"Sí,No" }}</p>
-        
+{% block content %}
+<div class="content-data" id="data">
+    <div class="container">
+        <h2>Información de tu Mascota</h2>
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Nombre:</strong> {{ mascota.nombre }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Especie:</strong> {{ mascota.especie }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Raza:</strong> {{ mascota.raza }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Fecha de Nacimiento:</strong> {{ mascota.fecha_nacimiento }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Fecha de Adquisición:</strong> {{ mascota.fecha_adquisicion }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Origen:</strong> {{ mascota.origen }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Pasado Adoptado:</strong> {{ mascota.pasado_adoptado }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Tiene Enfermedades:</strong> {{ mascota.tiene_enfermedades|yesno:"Sí,No" }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Última Visita al Veterinario:</strong> {{ mascota.ultima_visita_veterinario }}</p>
+            </div>
         </div>
+
+        <hr>
+
+        <!-- Sección de Mediciones -->
+        <h3>Mediciones de la Mascota</h3>
+        {% if mediciones %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Temperatura (°C)</th>
+                        <th>Peso (kg)</th>
+                        <th>Humedad (%)</th>
+                        <th>Luz (lux)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for medicion in mediciones %}
+                    <tr>
+                        <td>{{ medicion.fecha }}</td>
+                        <td>{{ medicion.temperatura|default:"0" }}</td>
+                        <td>{{ medicion.peso|default:"0" }}</td>
+                        <td>{{ medicion.humedad|default:"0" }}</td>
+                        <td>{{ medicion.luz|default:"0" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning" role="alert">
+            No hay mediciones registradas para esta mascota.
+        </div>
+        {% endif %}
+
+        <hr>
+
+        <!-- Formulario de Mediciones Nuevo -->
+        <h3>Registrar Nueva Medición</h3>
+        <form id="medicionForm">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="temperatura">Temperatura (°C)</label>
+                        <input type="number" class="form-control" id="temperatura" name="temperatura" value="0" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="peso">Peso (kg)</label>
+                        <input type="number" class="form-control" id="peso" name="peso" value="0" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="humedad">Humedad (%)</label>
+                        <input type="number" class="form-control" id="humedad" name="humedad" value="0" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="luz">Luz (lux)</label>
+                        <input type="number" class="form-control" id="luz" name="luz" value="0" required>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar Medición</button>
+        </form>
+
+        <script>
+            document.getElementById("medicionForm").addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevenir el envío tradicional del formulario
+
+                // Obtener los valores del formulario
+                var temperatura = document.getElementById("temperatura").value;
+                var peso = document.getElementById("peso").value;
+                var humedad = document.getElementById("humedad").value;
+                var luz = document.getElementById("luz").value;
+
+                // Crear el objeto de datos
+                var data = {
+                    temperature: temperatura,
+                    weight: peso,
+                    humidity: humedad,
+                    light: luz,
+                    timestamp: new Date().toISOString() // Timestamp actual
+                };
+
+                // Enviar los datos con fetch como JSON
+                fetch("{% url 'registrar_medicion' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'ok') {
+                        alert("Medición registrada exitosamente.");
+                    } else {
+                        alert("Error al registrar la medición: " + data.error);
+                    }
+                })
+                .catch(error => alert("Error al enviar los datos: " + error));
+            });
+        </script>
+
     </div>
-    {% endblock %}
+</div>
+{% endblock %}

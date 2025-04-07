@@ -1,5 +1,6 @@
 from django import forms
 from .models import Mascota
+from .models import Mediciones
 
 class MascotaForm(forms.ModelForm):
     class Meta:
@@ -16,4 +17,8 @@ class MascotaForm(forms.ModelForm):
             'ultima_visita_veterinario': forms.DateInput(attrs={'type': 'date'}),
             'enfermedades': forms.Textarea(attrs={'rows': 3}),
         }
+class MedicionesForm(forms.ModelForm):
+    class Meta:
+        model = Mediciones
+        fields = ['mascota', 'peso', 'temperatura', 'frecuencia_cardiaca', 'observaciones']
 
